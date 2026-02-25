@@ -1,0 +1,217 @@
+[
+  {
+    "id": 1,
+    "category": "Antipasti",
+    "items": [
+      {
+        "id": 101,
+        "name": "Tagliere Misto",
+        "description": "Selezione di salumi e formaggi locali con miele e noci",
+        "price": 18.00,
+        "image": "https://placehold.co/600x400/png?text=Tagliere+Misto"
+      },
+      {
+        "id": 102,
+        "name": "Bruschetta al Pomodoro",
+        "description": "Pane tostato, pomodorini freschi, basilico, aglio, olio EVO",
+        "price": 6.50,
+        "image": "https://placehold.co/600x400/png?text=Bruschetta"
+      },
+      {
+        "id": 103,
+        "name": "Fritto Misto",
+        "description": "Arancini, crocchette di patate, olive ascolane",
+        "price": 9.00,
+        "image": "https://placehold.co/600x400/png?text=Fritto+Misto"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "category": "Primi Piatti",
+    "items": [
+      {
+        "id": 201,
+        "name": "Spaghetti alla Carbonara",
+        "description": "Guanciale croccante, uova, pecorino romano, pepe nero",
+        "price": 12.00,
+        "image": "https://placehold.co/600x400/png?text=Carbonara"
+      },
+      {
+        "id": 202,
+        "name": "Lasagna alla Bolognese",
+        "description": "Ragù di carne, besciamella, parmigiano reggiano",
+        "price": 13.50,
+        "image": "https://placehold.co/600x400/png?text=Lasagna"
+      },
+      {
+        "id": 203,
+        "name": "Tonnarelli Cacio e Pepe",
+        "description": "Pecorino romano DOP, pepe nero tostato",
+        "price": 11.00,
+        "image": "https://placehold.co/600x400/png?text=Cacio+e+Pepe"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "category": "Pizze Classiche",
+    "items": [
+      {
+        "id": 301,
+        "name": "Margherita",
+        "description": "Pomodoro San Marzano, fior di latte, basilico fresco",
+        "price": 8.00,
+        "image": "https://placehold.co/600x400/png?text=Margherita"
+      },
+      {
+        "id": 302,
+        "name": "Diavola",
+        "description": "Pomodoro, mozzarella, salame piccante",
+        "price": 9.50,
+        "image": "https://placehold.co/600x400/png?text=Diavola"
+      },
+      {
+        "id": 303,
+        "name": "Capricciosa",
+        "description": "Pomodoro, mozzarella, funghi, carciofi, prosciutto cotto, olive",
+        "price": 10.50,
+        "image": "https://placehold.co/600x400/png?text=Capricciosa"
+      },
+      {
+        "id": 304,
+        "name": "Napoli",
+        "description": "Pomodoro, mozzarella, acciughe, origano",
+        "price": 9.00,
+        "image": "https://placehold.co/600x400/png?text=Napoli"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "category": "Pizze Gourmet",
+    "items": [
+      {
+        "id": 401,
+        "name": "Bronte",
+        "description": "Mozzarella, mortadella IGP, granella di pistacchio, burrata",
+        "price": 14.00,
+        "image": "https://placehold.co/600x400/png?text=Pizza+Bronte"
+      },
+      {
+        "id": 402,
+        "name": "Tartufata",
+        "description": "Crema di tartufo, salsiccia, funghi porcini",
+        "price": 15.00,
+        "image": "https://placehold.co/600x400/png?text=Pizza+Tartufo"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "category": "Burger & Grill",
+    "items": [
+      {
+        "id": 501,
+        "name": "Bacon Burger",
+        "description": "Manzo 200g, cheddar, bacon croccante, salsa BBQ",
+        "price": 12.50,
+        "image": "https://placehold.co/600x400/png?text=Bacon+Burger"
+      },
+      {
+        "id": 502,
+        "name": "Tagliata di Manzo",
+        "description": "Rucola, grana, pomodorini, aceto balsamico",
+        "price": 22.00,
+        "image": "https://placehold.co/600x400/png?text=Tagliata"
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "category": "Contorni",
+    "items": [
+      {
+        "id": 601,
+        "name": "Patatine Fritte",
+        "description": "Classiche stick",
+        "price": 4.00,
+        "image": "https://placehold.co/600x400/png?text=Patatine"
+      },
+      {
+        "id": 602,
+        "name": "Insalata Mista",
+        "description": "Lattuga, pomodoro, carote, mais",
+        "price": 5.00,
+        "image": "https://placehold.co/600x400/png?text=Insalata"
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "category": "Dolci",
+    "items": [
+      {
+        "id": 701,
+        "name": "Tiramisù della Casa",
+        "description": "Ricetta classica con savoiardi e mascarpone",
+        "price": 6.00,
+        "image": "https://placehold.co/600x400/png?text=Tiramisu"
+      },
+      {
+        "id": 702,
+        "name": "Panna Cotta",
+        "description": "Frutti di bosco o cioccolato",
+        "price": 5.50,
+        "image": "https://placehold.co/600x400/png?text=Panna+Cotta"
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "category": "Bevande",
+    "items": [
+      {
+        "id": 801,
+        "name": "Acqua Naturale 50cl",
+        "description": "Bottiglia di vetro",
+        "price": 2.00,
+        "image": "https://placehold.co/600x400/png?text=Acqua"
+      },
+      {
+        "id": 802,
+        "name": "Coca Cola Zero",
+        "description": "Lattina 33cl",
+        "price": 3.00,
+        "image": "https://placehold.co/600x400/png?text=Cola+Zero"
+      },
+      {
+        "id": 803,
+        "name": "Birra Peroni",
+        "description": "33cl",
+        "price": 4.00,
+        "image": "https://placehold.co/600x400/png?text=Birra+Peroni"
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "category": "Vini & Caffè",
+    "items": [
+      {
+        "id": 901,
+        "name": "Chianti Classico",
+        "description": "Calice (Glass)",
+        "price": 6.00,
+        "image": "https://placehold.co/600x400/png?text=Vino+Rosso"
+      },
+      {
+        "id": 902,
+        "name": "Espresso",
+        "description": "Caffè Italiano",
+        "price": 1.50,
+        "image": "https://placehold.co/600x400/png?text=Caffe"
+      }
+    ]
+  }
+]

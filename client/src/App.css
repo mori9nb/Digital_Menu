@@ -1,0 +1,145 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap');
+
+/* 1. تنظیمات اصلی صفحه (قفس آهنی برای جلوگیری از واید شدن) */
+html, body {
+  height: auto !important; /* ارتفاع نباید 100% باشه تا اسکرول روی بادی بیفته */
+  min-height: 100vh;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden !important; /* فقط افقی بسته */
+  overflow-y: visible !important; /* عمودی حتماً باز */
+  margin: 0;
+  padding: 0;
+}
+
+/* 2. ریشه برنامه */
+#root {
+  display: block !important; /* فلکس رو حذف کن! */
+  width: 100%;
+  max-width: 100vw;
+  overflow: visible !important; /* ریشه نباید اسکرول رو مخفی کنه */
+  position: relative;
+}
+
+/* 3. اصلاح باگ بوت‌استرپ */
+.row {
+  margin-right: 0 !important;
+  margin-left: 0 !important;
+}
+
+.container, .container-fluid {
+  overflow: visible !important; /* کانتینرها نباید استیکی رو خراب کنن */
+}
+
+:root {
+  --primary: #1a1a1a;
+  --accent: #c5a059;
+  --bg: #f8f9fa;
+}
+
+body {
+  background-color: var(--bg);
+  font-family: 'Inter', sans-serif;
+}
+
+/* 4. هدر عکس‌دار */
+.hero-section {
+  background: url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1000&auto=format&fit=crop') no-repeat center center/cover;
+  height: 250px;
+  position: relative;
+  border-radius: 0 0 30px 30px;
+  margin-bottom: 0;
+}
+
+.hero-overlay {
+  background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 2rem;
+  border-radius: 0 0 30px 30px;
+  color: white;
+}
+
+/* 5. نوار چسبنده (Sticky) */
+.glass-nav {
+  position: -webkit-sticky; /* سافاری */
+  position: sticky;         /* کروم و بقیه */
+  top: 0;                  /* بچسب به سقف */
+  z-index: 1020;            /* لایه بالا */
+
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  width: 100%;
+  padding: 10px 0;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+}
+
+.scroll-menu {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 10px;
+  padding: 0 15px;
+  width: 100%;
+
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scroll-menu::-webkit-scrollbar {
+  display: none;
+}
+
+.nav-pill {
+  flex: 0 0 auto;
+  padding: 8px 18px;
+  border-radius: 50px;
+  border: 1px solid #eee;
+  background: white;
+  color: #666;
+  font-weight: 600;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.nav-pill.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+  transform: scale(1.05);
+}
+
+/* 6. استایل کارت‌ها */
+.menu-card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+  margin-bottom: 0;
+  border: none;
+}
+
+.text-truncate-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 0.85rem;
+  color: #777;
+}
+
+.font-playfair {
+  font-family: 'Playfair Display', serif;
+}
+
+.click-effect:active {
+  transform: scale(0.98);
+  transition: 0.1s;
+}
