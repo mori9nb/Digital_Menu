@@ -195,7 +195,7 @@ function App() {
                 <img src="/logo.png" alt="Logo" className="logo-image" />
 
                 {/* ۲. نشانگر اسکرول (فلش) که فقط وقتی لوگو پایینه دیده میشه */}
-                <div className="scroll-indicator">
+                <div className="scroll-indicator" onClick={scrollToTop}>
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M12 19V5M5 12l7-7 7 7"/>
                     </svg>

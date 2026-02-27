@@ -320,10 +320,11 @@ body {
 
   opacity: 0; /* تو حالت عادی که لوگو وسطه، این فلش مخفیه */
   transition: opacity 0.5s ease;
-  pointer-events: none; /* که مزاحم کلیک نشه */
+  pointer-events: auto; /* که مزاحم کلیک نشه */
 
   /* یه انیمیشن ریز برای جلب توجه مشتری */
   animation: bounce 2s infinite;
+  cursor: pointer;
 }
 
 /* وقتی لوگو رفت پایین، فلش ظاهر میشه */
