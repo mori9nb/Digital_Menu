@@ -17,10 +17,26 @@ function App() {
     const [isGatewayClosing, setIsGatewayClosing] = useState(false);
     // پیش‌فرض می‌ذاریم رو رستوران، ولی از تو دروازه عوضش می‌کنیم
     const [activeMenuType, setActiveMenuType] = useState('restaurant');
+    // استیت برای نمایش یا مخفی کردن دکمه اسکرول آپ
+    const [showTopBtn, setShowTopBtn] = useState(false);
 
+// تابعی که چک میکنه چقدر اومدیم پایین
+    const handleScrollPosition = (e) => {
+        // اگه بیشتر از 300 پیکسل اومدیم پایین، دکمه رو نشون بده
+        if (e.target.scrollTop > 300) {
+            setShowTopBtn(true);
+        } else {
+            setShowTopBtn(false);
+        }
+    };
+
+// تابع رفتن به بالا
+    const scrollToTop = () => {
+        document.querySelector('.main-scroll-container').scrollTo({ top: 0, behavior: 'smooth' });
+    };
     // دریافت منو
     useEffect(() => {
-        axios.get('http://localhost/DigitalMenu/api/index.php')
+        axios.get('http://10.15.71.227/DigitalMenu/api/index.php')
             .then(res => {
                 setMenu(res.data);
                 setLoading(false);
@@ -84,13 +100,20 @@ function App() {
         animation="grow" variant="dark"/></div>;
 
     // todo organize categories for each part of menu
-    const cafeCategories = ['Caffè', 'Dolci', 'Bevande', 'Tè'];
+    // دسته‌بندی‌های دیتابیس رو اینجا به ۴ گروه تقسیم می‌کنیم
+// ⚠️ نکته مهم: اسم‌های سمت راست رو دقیقاً مثل دیتابیس خودت بنویس!
+    const menuMapping = {
+        'daily': ['Menu del Giorno', 'Contorni'], // منوی روز
+        'cafe': ['Caffè', 'Dolci', 'Tè e Tisane'], // کافه
+        'restaurant': ['Pizze Classiche', 'Primi Piatti', 'Secondi', 'Antipasti', 'Insalate','Burger & Grill'], // رستوران
+        'cocktail': ['Cocktail', 'Vini', 'Birre', 'Bevande'] // بار و کوکتل
+    };
+
+// فیلتر هوشمند منو بر اساس دکمه‌ی انتخاب شده
     const filteredMenu = menu.filter(cat => {
-        if (activeMenuType === 'cafe') {
-            return cafeCategories.includes(cat.category); // فقط کافه‌ها رو بده
-        } else {
-            return !cafeCategories.includes(cat.category); // فقط رستورانی‌ها رو بده
-        }
+        // میگه برو تو دیکشنری بالا بگرد، ببین کدوما مال این بخش هستن
+        const allowedCategories = menuMapping[activeMenuType] || [];
+        return allowedCategories.includes(cat.category);
     });
 
     // تابعی که وقتی روی یکی از نیمه‌های دروازه کلیک میشه اجرا میشه
@@ -109,6 +132,26 @@ function App() {
         }, 800);
     };
 
+    // تابع جادویی برای آوردن دکمه کلیک شده به وسط صفحه
+    const handleCategoryPillClick = (e, catId) => {
+        // ۱. اول صفحه اصلی رو اسکرول می‌کنیم روی اون غذا
+        scrollToCategory(catId);
+
+        // ۲. حالا نوار دسته‌بندی‌ها رو حرکت میدیم
+        const container = document.querySelector('.scroll-menu');
+        const button = e.currentTarget;
+
+        if (container && button) {
+            // محاسبه ریاضی: موقعیت دکمه منهای نصف عرض صفحه به علاوه نصف عرض خود دکمه
+            const scrollLeftPos = button.offsetLeft - (container.offsetWidth / 2) + (button.offsetWidth / 2);
+
+            container.scrollTo({
+                left: scrollLeftPos,
+                behavior: 'smooth'
+            });
+        }
+    };
+
     return (
         <>
             {/* ========================================== */}
@@ -116,20 +159,24 @@ function App() {
             {showGateway && (
                 <div className={`gateway-container ${isGatewayClosing ? 'gateway-closing' : ''}`}>
 
-                    {/* نیمه بالا: رستوران */}
-                    <div
-                        className="gateway-half gateway-restaurant"
-                        onClick={() => handleGatewayClick('restaurant')}
-                    >
+                    {/* ۱. بالا چپ: منوی روز */}
+                    <div className="gateway-quadrant quad-menu" onClick={() => handleGatewayClick('daily')}>
+                        <h2 className="gateway-text font-playfair fw-bold">Menu del<br/>Giorno</h2>
+                    </div>
+
+                    {/* ۲. بالا راست: کافه */}
+                    <div className="gateway-quadrant quad-cafe" onClick={() => handleGatewayClick('cafe')}>
+                        <h2 className="gateway-text font-playfair fw-bold">Caffetteria</h2>
+                    </div>
+
+                    {/* ۳. پایین چپ: رستوران */}
+                    <div className="gateway-quadrant quad-rest" onClick={() => handleGatewayClick('restaurant')}>
                         <h2 className="gateway-text font-playfair fw-bold">Ristorante</h2>
                     </div>
 
-                    {/* نیمه پایین: کافه */}
-                    <div
-                        className="gateway-half gateway-cafe"
-                        onClick={() => handleGatewayClick('cafe')}
-                    >
-                        <h2 className="gateway-text font-playfair fw-bold">Caffetteria</h2>
+                    {/* ۴. پایین راست: کوکتل */}
+                    <div className="gateway-quadrant quad-cocktail" onClick={() => handleGatewayClick('cocktail')}>
+                        <h2 className="gateway-text font-playfair fw-bold">Cocktail</h2>
                     </div>
 
 
@@ -139,8 +186,20 @@ function App() {
 
             {/* --- ۲. لوگوی دائمی (بیرون از پرده گذاشتیمش که پاک نشه) --- */}
             {/* شرط طلایی: اگه پرده داره بسته میشه یا کلا بسته شده، کلاس logo-top رو بهش بده */}
-            <div className={`gateway-logo font-playfair fw-bold ${(isGatewayClosing || !showGateway) ? 'logo-top' : ''}`}>
-                <h4>Milano<br/>Menu</h4>
+            <div
+                // ۱. کلاس رو به logo-bottom تغییر دادیم
+                className={`gateway-logo ${(isGatewayClosing || !showGateway) ? 'logo-bottom' : ''}`}
+                onClick={scrollToTop}
+                style={{ cursor: 'pointer' }}
+            >
+                <img src="/logo.png" alt="Logo" className="logo-image" />
+
+                {/* ۲. نشانگر اسکرول (فلش) که فقط وقتی لوگو پایینه دیده میشه */}
+                <div className="scroll-indicator">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M12 19V5M5 12l7-7 7 7"/>
+                    </svg>
+                </div>
             </div>
 
             {/* ========================================== */}
@@ -155,20 +214,38 @@ function App() {
                     </div>
                 </div>
 
-                {/* 🌟 این سوییچ جدید رو اینجا بذار (بالای نوار شیشه‌ای) 🌟 */}
-                <div className="d-flex justify-content-center mt-3 mb-2 px-3">
-                    <div className="bg-white p-1 rounded-pill shadow-sm d-flex w-100" style={{ border: '1px solid #eee' }}>
+                {/* 🌟 تب‌های ۴ گانه جدید (اسکرول افقی) 🌟 */}
+                <div className="modern-tabs-container mt-3 mb-2 px-3">
+                    {/* ردیف اول: منوی روز (تمام عرض) */}
+                    <button
+                        className={`tab-btn w-100 mb-2 py-2 fs-6 shadow-sm ${activeMenuType === 'daily' ? 'active' : ''}`}
+                        onClick={() => { setActiveMenuType('daily'); setActiveCategory(null); }}
+                    >
+                        🍽️ Menu del Giorno
+                    </button>
+
+                    {/* ردیف دوم: ۳ تای دیگه (تقسیم مساوی عرض) */}
+                    <div className="d-flex gap-2 w-100">
                         <button
-                            className={`btn rounded-pill flex-fill fw-bold transition-all ${activeMenuType === 'restaurant' ? 'btn-dark text-white' : 'btn-light text-muted'}`}
+                            className={`tab-btn flex-fill px-1 shadow-sm ${activeMenuType === 'restaurant' ? 'active' : ''}`}
                             onClick={() => { setActiveMenuType('restaurant'); setActiveCategory(null); }}
+                            style={{ fontSize: '0.8rem', whiteSpace: 'normal', lineHeight: '1.2' }}
                         >
-                            🍽️ Ristorante
+                            🍕 Ristorante
                         </button>
                         <button
-                            className={`btn rounded-pill flex-fill fw-bold transition-all ${activeMenuType === 'cafe' ? 'btn-dark text-white' : 'btn-light text-muted'}`}
+                            className={`tab-btn flex-fill px-1 shadow-sm ${activeMenuType === 'cafe' ? 'active' : ''}`}
                             onClick={() => { setActiveMenuType('cafe'); setActiveCategory(null); }}
+                            style={{ fontSize: '0.8rem', whiteSpace: 'normal', lineHeight: '1.2' }}
                         >
                             ☕ Caffetteria
+                        </button>
+                        <button
+                            className={`tab-btn flex-fill px-1 shadow-sm ${activeMenuType === 'cocktail' ? 'active' : ''}`}
+                            onClick={() => { setActiveMenuType('cocktail'); setActiveCategory(null); }}
+                            style={{ fontSize: '0.8rem', whiteSpace: 'normal', lineHeight: '1.2' }}
+                        >
+                            🍸 Cocktail
                         </button>
                     </div>
                 </div>
@@ -181,10 +258,11 @@ function App() {
                     <div className="scroll-menu">
                         <button
                             className={`nav-pill ${activeCategory === null ? 'active' : ''}`}
-                            onClick={() => {
-                                // برای رفتن به بالا باید کانتینر رو اسکرول کنیم نه window
-                                document.querySelector('.main-scroll-container').scrollTo({top: 0, behavior: 'smooth'});
+                            onClick={(e) => {
+                                document.querySelector('.main-scroll-container').scrollTo({ top: 0, behavior: 'smooth' });
                                 setActiveCategory(null);
+                                // اینم میاریم اول خط
+                                e.currentTarget.parentElement.scrollTo({ left: 0, behavior: 'smooth' });
                             }}
                         >
                             Tutti
@@ -194,7 +272,7 @@ function App() {
                             <button
                                 key={cat.id}
                                 className={`nav-pill ${activeCategory === cat.id ? 'active' : ''}`}
-                                onClick={() => scrollToCategory(cat.id)}
+                                onClick={(e) => handleCategoryPillClick(e, cat.id)}
                             >
                                 {cat.category}
                             </button>

@@ -63,7 +63,7 @@ body {
 
 /* 4. هدر عکس‌دار */
 .hero-section {
-  background: url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1000&auto=format&fit=crop') no-repeat center center/cover;
+  background: url('../public/background.jpg') no-repeat center center/cover;
   height: 250px;
   position: relative;
   border-radius: 0 0 30px 30px;
@@ -173,10 +173,12 @@ body {
   width: 100vw;
   height: 100vh;
   z-index: 9999; /* میاد روی همه چی */
-  display: flex;
-  flex-direction: column; /* برای موبایل بالا و پایین بهتره */
+
+  display: grid;
+  grid-template-columns: 50vw 50vw; /* دو ستون مساوی */
+  grid-template-rows: 50vh 50vh;    /* دو ردیف مساوی */
+
   background-color: transparent;
-  animation: fadeOut 0.5s forwards; /* برای وقتی که قراره بسته بشه */
 }
 
 .gateway-half {
@@ -202,27 +204,80 @@ body {
   z-index: 1;
 }
 
-.gateway-half:active::before {
-  background: rgba(0, 0, 0, 0.2); /* وقتی لمس میشه روشن‌تر میشه */
+/* استایل مشترک هر کدوم از ۴ مربع */
+.gateway-quadrant {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.8s cubic-bezier(0.645, 0.045, 0.355, 1.000);
 }
 
-/* عکس رستوران (بالا) */
-.gateway-restaurant {
-  background: url('https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=1000&auto=format&fit=crop') no-repeat center center/cover;
+/* تاریک کردن عکس‌ها برای خوانایی متن */
+.gateway-quadrant::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  transition: background 0.3s ease;
+  z-index: 1;
 }
 
-/* عکس کافه (پایین) */
-.gateway-cafe {
-  background: url('https://images.unsplash.com/photo-1497935586351-b67a49e012bf?q=80&w=1000&auto=format&fit=crop') no-repeat center center/cover;
+.gateway-quadrant:active::before {
+  background: rgba(0, 0, 0, 0.2);
 }
 
+/* متن داخل هر مربع */
 .gateway-text {
   position: relative;
   z-index: 2;
   color: white;
-  font-size: 2.5rem;
+  font-size: 1.5rem; /* یکم کوچیکترش کردم چون عرض گوشی نصف شده */
+  text-align: center;
   text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
+  padding: 0 10px;
 }
+
+/* ========================================= */
+/* عکس‌های پس‌زمینه ۴ بخش (لینک‌های خودت رو بذار) */
+
+.quad-menu { /* بالا چپ: منوی روز */
+  background: url('https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1000&auto=format&fit=crop') no-repeat center center/cover;
+}
+
+.quad-cafe { /* بالا راست: کافه */
+  background: url('https://images.unsplash.com/photo-1497935586351-b67a49e012bf?q=80&w=1000&auto=format&fit=crop') no-repeat center center/cover;
+}
+
+.quad-rest { /* پایین چپ: رستوران */
+  background: url('https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=1000&auto=format&fit=crop') no-repeat center center/cover;
+}
+
+.quad-cocktail { /* پایین راست: کوکتل */
+  background: url('https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=1000&auto=format&fit=crop') no-repeat center center/cover;
+}
+
+/* ========================================= */
+/* انیمیشن باز شدن از وسط به ۴ طرف (جادوی اصلی) */
+
+/* مربع بالا چپ -> میره سمت بالا و چپ */
+.gateway-container.gateway-closing .quad-menu { transform: translate(-100%, -100%); }
+
+/* مربع بالا راست -> میره سمت بالا و راست */
+.gateway-container.gateway-closing .quad-cafe { transform: translate(100%, -100%); }
+
+/* مربع پایین چپ -> میره سمت پایین و چپ */
+.gateway-container.gateway-closing .quad-rest { transform: translate(-100%, 100%); }
+
+/* مربع پایین راست -> میره سمت پایین و راست */
+.gateway-container.gateway-closing .quad-cocktail { transform: translate(100%, 100%); }
+
+.gateway-container.gateway-closing { pointer-events: none; }
 
 /* دایره لوگو در مرکز */
 .gateway-logo {
@@ -230,29 +285,57 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 120px;
-  height: 120px;
-  background: #fff;
-  border-radius: 50%;
+  width: 150px;
+  height: 150px;
+
+
   z-index: 10000;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-  border: 4px solid var(--accent); /* یه حاشیه طلایی */
+
   transition: all 0.8s cubic-bezier(0.645, 0.045, 0.355, 1.000); /* انیمیشن نرم */
 }
 
 /* --- ۲. کلاسی که وقتی پرده باز میشه به لوگو اضافه میشه --- */
-.gateway-logo.logo-top {
-  top: 15px;
+/* --- حالتی که لوگو میره پایین وسط صفحه --- */
+.gateway-logo.logo-bottom {
+  top: calc(100% - 50px);
 
-  /* 🌟 جادوی ریاضی: به جای right، از left استفاده می‌کنیم تا انیمیشن نرم بمونه */
-  /* یعنی: برو به ۱۰۰ درصدِ عرضِ صفحه، منهای ۹۰ پیکسل */
-  left: calc(100% - 90px);
+  left: 50%;
 
-  transform: translate(0, 0) scale(0.45); /* هم میره سر جاش، هم ۵۵٪ کوچیک میشه */
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15); /* سایه‌ش هم ملایم‌تر میشه */
+  /* ترنسلیت اولی برای وسط موندنه، دومی برای کوچیک شدن */
+  transform: translate(-50%, -50%) scale(0.45);
+  box-shadow: none;
+  z-index: 1000;
+}
+
+/* --- استایل نشانگر (فلش بالای لوگو) --- */
+.scroll-indicator {
+  position: absolute;
+  top: -40px; /* قرار گرفتن دقیقاً بالای لوگو */
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--dark, #212529); /* رنگ فلش (میتونی بکنی #000 یا یه رنگ طلایی) */
+
+  opacity: 0; /* تو حالت عادی که لوگو وسطه، این فلش مخفیه */
+  transition: opacity 0.5s ease;
+  pointer-events: none; /* که مزاحم کلیک نشه */
+
+  /* یه انیمیشن ریز برای جلب توجه مشتری */
+  animation: bounce 2s infinite;
+}
+
+/* وقتی لوگو رفت پایین، فلش ظاهر میشه */
+.gateway-logo.logo-bottom .scroll-indicator {
+  opacity: 1;
+}
+
+/* --- انیمیشن بالا پایین پریدن (مثل فنر) --- */
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+  40% { transform: translateX(-50%) translateY(-10px); }
+  60% { transform: translateX(-50%) translateY(-5px); }
 }
 
 .gateway-logo h4 {
@@ -283,4 +366,53 @@ body {
 /* 4. جلوگیری از کلیک مجدد وقتی داره انیمیشن اجرا میشه */
 .gateway-container.gateway-closing {
   pointer-events: none;
+}
+/* این کد، غول رو می‌کنه تو شیشه! */
+.logo-image {
+  width: 100%;        /* یعنی ۱۰۰٪ از اون ۱۲۰ پیکسلِ پدرش، نه کل صفحه */
+  height: auto;
+  object-fit: contain;  /* باعث میشه عکس بدون دفرمه شدن، کل دایره رو پر کنه */
+}
+
+/* --- استایل تب‌های ۴ گانه --- */
+.modern-tabs-container {
+  width: 100%;
+  overflow-x: auto; /* اجازه میده افقی اسکرول بشه */
+  -webkit-overflow-scrolling: touch; /* اسکرول نرم تو آیفون */
+  scrollbar-width: none; /* مخفی کردن نوار اسکرول تو فایرفاکس */
+}
+
+/* مخفی کردن نوار اسکرول تو کروم و سافاری */
+.modern-tabs-container::-webkit-scrollbar {
+  display: none;
+}
+
+.modern-tabs {
+  display: flex;
+  gap: 10px;
+  padding-bottom: 5px; /* یه فاصله ریز برای سایه‌ها */
+  width: max-content; /* خیلی مهم: باعث میشه دکمه‌ها جمع نشن و تو یک خط بمونن */
+}
+
+.tab-btn {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  color: #6c757d;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  white-space: nowrap; /* نمیذاره متن بره خط بعد */
+  transition: all 0.3s ease;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+}
+
+/* حالتی که دکمه انتخاب شده */
+.tab-btn.active {
+  background: var(--dark, #212529); /* رنگ تیره */
+  color: white;
+  border-color: var(--dark, #212529);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  transform: translateY(-2px); /* یه نمه میاد بالا */
 }
