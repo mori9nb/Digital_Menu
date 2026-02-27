@@ -146,3 +146,141 @@ body {
   transform: scale(0.98);
   transition: 0.1s;
 }
+/* افکت پرش سبد خرید */
+@keyframes pop-animation {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+.cart-pop {
+  animation: pop-animation 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.menu-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* وقتی انگشت میاد روش */
+.menu-card:active {
+  transform: scale(0.98);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  background-color: #fcfcfc;
+}
+/* --- جادوی دروازه ورودی (Gateway) --- */
+.gateway-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999; /* میاد روی همه چی */
+  display: flex;
+  flex-direction: column; /* برای موبایل بالا و پایین بهتره */
+  background-color: transparent;
+  animation: fadeOut 0.5s forwards; /* برای وقتی که قراره بسته بشه */
+}
+
+.gateway-half {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+/* افکت تاریک شدن عکس‌ها تا متن خوانا بشه */
+.gateway-half::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  transition: background 0.3s ease;
+  z-index: 1;
+}
+
+.gateway-half:active::before {
+  background: rgba(0, 0, 0, 0.2); /* وقتی لمس میشه روشن‌تر میشه */
+}
+
+/* عکس رستوران (بالا) */
+.gateway-restaurant {
+  background: url('https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=1000&auto=format&fit=crop') no-repeat center center/cover;
+}
+
+/* عکس کافه (پایین) */
+.gateway-cafe {
+  background: url('https://images.unsplash.com/photo-1497935586351-b67a49e012bf?q=80&w=1000&auto=format&fit=crop') no-repeat center center/cover;
+}
+
+.gateway-text {
+  position: relative;
+  z-index: 2;
+  color: white;
+  font-size: 2.5rem;
+  text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
+}
+
+/* دایره لوگو در مرکز */
+.gateway-logo {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120px;
+  height: 120px;
+  background: #fff;
+  border-radius: 50%;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  border: 4px solid var(--accent); /* یه حاشیه طلایی */
+  transition: all 0.8s cubic-bezier(0.645, 0.045, 0.355, 1.000); /* انیمیشن نرم */
+}
+
+/* --- ۲. کلاسی که وقتی پرده باز میشه به لوگو اضافه میشه --- */
+.gateway-logo.logo-top {
+  top: 15px;
+
+  /* 🌟 جادوی ریاضی: به جای right، از left استفاده می‌کنیم تا انیمیشن نرم بمونه */
+  /* یعنی: برو به ۱۰۰ درصدِ عرضِ صفحه، منهای ۹۰ پیکسل */
+  left: calc(100% - 90px);
+
+  transform: translate(0, 0) scale(0.45); /* هم میره سر جاش، هم ۵۵٪ کوچیک میشه */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15); /* سایه‌ش هم ملایم‌تر میشه */
+}
+
+.gateway-logo h4 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: var(--primary);
+  text-align: center;
+  line-height: 1.1;
+}
+/* --- تنظیمات پایه برای انیمیشن نرم --- */
+.gateway-half, .gateway-logo {
+  /* این خط حیاتیه: باعث میشه تغییرات نرم انجام بشه نه یهویی */
+  transition: all 0.8s cubic-bezier(0.645, 0.045, 0.355, 1.000); /* افکتeaseInOutCubic */
+}
+/* 1. نیمه بالایی (رستوران) میره به سمت بالا */
+.gateway-container.gateway-closing .gateway-restaurant {
+  transform: translateY(-100%);
+}
+
+/* 2. نیمه پایینی (کافه) میره به سمت پایین */
+.gateway-container.gateway-closing .gateway-cafe {
+  transform: translateY(100%);
+}
+
+
+
+
+/* 4. جلوگیری از کلیک مجدد وقتی داره انیمیشن اجرا میشه */
+.gateway-container.gateway-closing {
+  pointer-events: none;
+}
