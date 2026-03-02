@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react';
 import axios from 'axios';
 import {Container, Row, Col, Card, Spinner, Offcanvas, ListGroup, Button, Badge} from 'react-bootstrap';
-import {FaPlus, FaShoppingBag, FaUtensils, FaTrash, FaWhatsapp} from 'react-icons/fa';
+import {FaPlus, FaShoppingBag, FaUtensils, FaTrash, FaWhatsapp, FaCheck} from 'react-icons/fa';
 import './App.css';
 
 function App() {
@@ -20,6 +20,8 @@ function App() {
     // استیت برای نمایش یا مخفی کردن دکمه اسکرول آپ
     const [showTopBtn, setShowTopBtn] = useState(false);
 
+    // برای کنترل فیدبکِ دکمه‌های افزودن به سبد خرید
+    const [addedFeedback, setAddedFeedback] = useState({});
 // تابعی که چک میکنه چقدر اومدیم پایین
     const handleScrollPosition = (e) => {
         // اگه بیشتر از 300 پیکسل اومدیم پایین، دکمه رو نشون بده
@@ -32,7 +34,7 @@ function App() {
 
 // تابع رفتن به بالا
     const scrollToTop = () => {
-        document.querySelector('.main-scroll-container').scrollTo({ top: 0, behavior: 'smooth' });
+        document.querySelector('.main-scroll-container').scrollTo({top: 0, behavior: 'smooth'});
     };
     // دریافت منو
     useEffect(() => {
@@ -51,6 +53,11 @@ function App() {
         // اجرای افکت پرش
         setIsCartBouncing(true);
         setTimeout(() => setIsCartBouncing(false), 300); // بعد از 0.3 ثانیه افکت رو خاموش کن
+        // --- جادوی فیدبک UX ---
+        setAddedFeedback(prev => ({...prev, [item.id]: true}));
+        setTimeout(() => {
+            setAddedFeedback(prev => ({...prev, [item.id]: false}));
+        }, 1500); // بعد از 1.5 ثانیه برمیگرده به حالت عادی
     };
 
     // تابع حذف از سبد خرید
@@ -103,10 +110,10 @@ function App() {
     // دسته‌بندی‌های دیتابیس رو اینجا به ۴ گروه تقسیم می‌کنیم
 // ⚠️ نکته مهم: اسم‌های سمت راست رو دقیقاً مثل دیتابیس خودت بنویس!
     const menuMapping = {
-        'daily': ['Menu del Giorno', 'Contorni'], // منوی روز
-        'cafe': ['Caffè', 'Dolci', 'Tè e Tisane'], // کافه
-        'restaurant': ['Pizze Classiche', 'Primi Piatti', 'Secondi', 'Antipasti', 'Insalate','Burger & Grill'], // رستوران
-        'cocktail': ['Cocktail', 'Vini', 'Birre', 'Bevande'] // بار و کوکتل
+        'daily': ['Colazione & Pasticceria', 'Gelateria'], // تب صبحانه و شیرینی
+        'cafe': ['Colazione & Pasticceria'],
+        'restaurant': ['Gastronomia & Tavola Calda'], // تب غذاهای گرم و فست فود
+        'cocktail': ['Aperitivi & Cocktail'] // تب کوکتل و عصرانه
     };
 
 // فیلتر هوشمند منو بر اساس دکمه‌ی انتخاب شده
@@ -127,7 +134,7 @@ function App() {
             setIsGatewayClosing(false);
 
             // فقط کافیه اسکرول کنیم به بالاترین نقطه صفحه
-            document.querySelector('.main-scroll-container').scrollTo({ top: 0, behavior: 'instant' });
+            document.querySelector('.main-scroll-container').scrollTo({top: 0, behavior: 'instant'});
 
         }, 800);
     };
@@ -161,24 +168,23 @@ function App() {
 
                     {/* ۱. بالا چپ: منوی روز */}
                     <div className="gateway-quadrant quad-menu" onClick={() => handleGatewayClick('daily')}>
-                        <h2 className="gateway-text font-playfair fw-bold">Menu del<br/>Giorno</h2>
+                        <h2 className="gateway-text font-playfair fw-bold">Colazione &<br/>Pasticceria</h2>
                     </div>
 
                     {/* ۲. بالا راست: کافه */}
                     <div className="gateway-quadrant quad-cafe" onClick={() => handleGatewayClick('cafe')}>
-                        <h2 className="gateway-text font-playfair fw-bold">Caffetteria</h2>
+                        <h2 className="gateway-text font-playfair fw-bold">Gelateria</h2>
                     </div>
 
                     {/* ۳. پایین چپ: رستوران */}
                     <div className="gateway-quadrant quad-rest" onClick={() => handleGatewayClick('restaurant')}>
-                        <h2 className="gateway-text font-playfair fw-bold">Ristorante</h2>
+                        <h2 className="gateway-text font-playfair fw-bold">Tavola Calda</h2>
                     </div>
 
                     {/* ۴. پایین راست: کوکتل */}
                     <div className="gateway-quadrant quad-cocktail" onClick={() => handleGatewayClick('cocktail')}>
-                        <h2 className="gateway-text font-playfair fw-bold">Cocktail</h2>
+                        <h2 className="gateway-text font-playfair fw-bold">Aperitivi &<br/>Cocktail</h2>
                     </div>
-
 
 
                 </div>
@@ -190,13 +196,14 @@ function App() {
                 // ۱. کلاس رو به logo-bottom تغییر دادیم
                 className={`gateway-logo ${(isGatewayClosing || !showGateway) ? 'logo-bottom' : ''}`}
                 onClick={scrollToTop}
-                style={{ cursor: 'pointer' }}
+                style={{cursor: 'pointer'}}
             >
-                <img src="/logo.png" alt="Logo" className="logo-image" />
+                <img src="/casaramona_logo.png" alt="Logo" className="logo-image"/>
 
                 {/* ۲. نشانگر اسکرول (فلش) که فقط وقتی لوگو پایینه دیده میشه */}
                 <div className="scroll-indicator" onClick={scrollToTop}>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"
+                         strokeLinecap="round" strokeLinejoin="round">
                         <path d="M12 19V5M5 12l7-7 7 7"/>
                     </svg>
                 </div>
@@ -209,8 +216,8 @@ function App() {
                 <div className="hero-section">
                     {/* ... محتویات هدر همونه ... */}
                     <div className="hero-overlay">
-                        <h1 className="display-5 fw-bold font-playfair">Ristorante Milano</h1>
-                        <p className="mb-0 text-white-50"><FaUtensils className="me-2"/>Cucina Italiana Autentica</p>
+                        {/*<h1 className="display-5 fw-bold font-playfair">Ristorante Milano</h1>*/}
+                        <p className="mb-0 text-white-50"><FaUtensils className="me-2"/>Bar Ritrovo Casaramona</p>
                     </div>
                 </div>
 
@@ -219,33 +226,45 @@ function App() {
                     {/* ردیف اول: منوی روز (تمام عرض) */}
                     <button
                         className={`tab-btn w-100 mb-2 py-2 fs-6 shadow-sm ${activeMenuType === 'daily' ? 'active' : ''}`}
-                        onClick={() => { setActiveMenuType('daily'); setActiveCategory(null); }}
+                        onClick={() => {
+                            setActiveMenuType('daily');
+                            setActiveCategory(null);
+                        }}
                     >
-                        🍽️ Menu del Giorno
+                        🥐 Colazione & Pasticceria
                     </button>
 
                     {/* ردیف دوم: ۳ تای دیگه (تقسیم مساوی عرض) */}
                     <div className="d-flex gap-2 w-100">
                         <button
                             className={`tab-btn flex-fill px-1 shadow-sm ${activeMenuType === 'restaurant' ? 'active' : ''}`}
-                            onClick={() => { setActiveMenuType('restaurant'); setActiveCategory(null); }}
-                            style={{ fontSize: '0.8rem', whiteSpace: 'normal', lineHeight: '1.2' }}
+                            onClick={() => {
+                                setActiveMenuType('restaurant');
+                                setActiveCategory(null);
+                            }}
+                            style={{fontSize: '0.8rem', whiteSpace: 'normal', lineHeight: '1.2'}}
                         >
-                            🍕 Ristorante
+                            🍕 Tavola Calda
                         </button>
                         <button
                             className={`tab-btn flex-fill px-1 shadow-sm ${activeMenuType === 'cafe' ? 'active' : ''}`}
-                            onClick={() => { setActiveMenuType('cafe'); setActiveCategory(null); }}
-                            style={{ fontSize: '0.8rem', whiteSpace: 'normal', lineHeight: '1.2' }}
+                            onClick={() => {
+                                setActiveMenuType('cafe');
+                                setActiveCategory(null);
+                            }}
+                            style={{fontSize: '0.8rem', whiteSpace: 'normal', lineHeight: '1.2'}}
                         >
-                            ☕ Caffetteria
+                            🍦 Gelateria
                         </button>
                         <button
                             className={`tab-btn flex-fill px-1 shadow-sm ${activeMenuType === 'cocktail' ? 'active' : ''}`}
-                            onClick={() => { setActiveMenuType('cocktail'); setActiveCategory(null); }}
-                            style={{ fontSize: '0.8rem', whiteSpace: 'normal', lineHeight: '1.2' }}
+                            onClick={() => {
+                                setActiveMenuType('cocktail');
+                                setActiveCategory(null);
+                            }}
+                            style={{fontSize: '0.8rem', whiteSpace: 'normal', lineHeight: '1.2'}}
                         >
-                            🍸 Cocktail
+                            🍹 Aperitivi
                         </button>
                     </div>
                 </div>
@@ -259,10 +278,10 @@ function App() {
                         <button
                             className={`nav-pill ${activeCategory === null ? 'active' : ''}`}
                             onClick={(e) => {
-                                document.querySelector('.main-scroll-container').scrollTo({ top: 0, behavior: 'smooth' });
+                                document.querySelector('.main-scroll-container').scrollTo({top: 0, behavior: 'smooth'});
                                 setActiveCategory(null);
                                 // اینم میاریم اول خط
-                                e.currentTarget.parentElement.scrollTo({ left: 0, behavior: 'smooth' });
+                                e.currentTarget.parentElement.scrollTo({left: 0, behavior: 'smooth'});
                             }}
                         >
                             Tutti
@@ -304,12 +323,14 @@ function App() {
                                                     <div>
                                                         <div
                                                             className="d-flex justify-content-between align-items-start mb-1">
-                                                            <h6 className="fw-bold mb-0 text-truncate me-2"
-                                                                style={{fontSize: '1rem'}}>{item.name}</h6>
-                                                            <span className="text-success fw-bold"
-                                                                  style={{whiteSpace: 'nowrap'}}>€{item.price}</span>
+                                                            <h6 className="food-title mb-0 text-truncate me-2" style={{
+                                                                fontSize: '1.1rem',
+                                                                fontWeight: '700'
+                                                            }}>{item.name}</h6>
+                                                            <span className="price-tag"
+                                                                  style={{whiteSpace: 'nowrap'}}>€{item.price.toFixed(2)}</span>
                                                         </div>
-                                                        <p className="text-muted small mb-0" style={{
+                                                        <p className="food-desc mt-1 mb-0" style={{
                                                             display: '-webkit-box',
                                                             WebkitLineClamp: 2,
                                                             WebkitBoxOrient: 'vertical',
@@ -322,11 +343,28 @@ function App() {
                                                     </div>
                                                     <div className="d-flex justify-content-end mt-2">
                                                         <button
-                                                            className="btn btn-sm btn-dark rounded-pill px-3 py-1 d-flex align-items-center"
+                                                            className={`btn btn-sm rounded-pill px-3 py-1 d-flex align-items-center transition-all ${
+                                                                addedFeedback[item.id] ? 'btn-success text-white border-success' : 'btn-add-chic'
+                                                            }`}
                                                             onClick={() => addToCart(item)}
                                                         >
-                                                            <FaPlus size={10} className="me-1"/>
-                                                            <span style={{fontSize: '0.8rem'}}>Aggiungi</span>
+                                                            {addedFeedback[item.id] ? (
+                                                                <>
+                                                                    <FaCheck size={10} className="me-1"/>
+                                                                    <span style={{
+                                                                        fontSize: '0.8rem',
+                                                                        fontWeight: '600'
+                                                                    }}>Aggiunto!</span>
+                                                                </>
+                                                            ) : (
+                                                                <>
+                                                                    <FaPlus size={10} className="me-1"/>
+                                                                    <span style={{
+                                                                        fontSize: '0.8rem',
+                                                                        fontWeight: '600'
+                                                                    }}>Aggiungi</span>
+                                                                </>
+                                                            )}
                                                         </button>
                                                     </div>
                                                 </Card.Body>
@@ -353,7 +391,9 @@ function App() {
                             style={{width: 30, height: 30, fontWeight: 'bold'}}>
                             {cart.length}
                         </span>
-                                <span className="fw-bold">€{totalPrice.toFixed(2)}</span>
+                                <span className="price-tag mb-0" style={{fontSize: '1.2rem', color: '#c5a059'}}>
+        €{totalPrice.toFixed(2)}
+    </span>
                             </div>
                             <div className="d-flex align-items-center">
                                 <span className="me-2 small text-uppercase fw-bold">Vedi Ordine</span>
@@ -375,24 +415,35 @@ function App() {
                                 <ListGroup.Item key={item.cartId}
                                                 className="d-flex justify-content-between align-items-center px-0">
                                     <div>
-                                        <div className="fw-bold">{item.name}</div>
-                                        <div className="text-muted small">€{item.price}</div>
+                                        <div className="food-title" style={{fontSize: '1rem', fontWeight: '700'}}>
+                                            {item.name}
+                                        </div>
+                                        <div className="price-tag" style={{fontSize: '0.9rem'}}>
+                                            €{item.price.toFixed(2)}
+                                        </div>
                                     </div>
-                                    <Button variant="outline-danger" size="sm" className="rounded-circle"
-                                            onClick={() => removeFromCart(item.cartId)}>
-                                        <FaTrash size={12}/>
+                                    <Button
+                                        className="btn-delete-chic d-flex justify-content-center align-items-center p-2 rounded-circle ms-3"
+                                        onClick={() => removeFromCart(item.cartId)}>
+                                        <FaTrash size={13}/>
                                     </Button>
                                 </ListGroup.Item>
                             ))}
                         </ListGroup>
                         <div className="border-top pt-3">
-                            <div className="d-flex justify-content-between mb-3 fs-5 fw-bold">
-                                <span>Totale:</span>
-                                <span>€{totalPrice.toFixed(2)}</span>
+                            <div className="d-flex justify-content-between align-items-center mb-3">
+                                <span className="font-playfair fw-bold"
+                                      style={{fontSize: '1.3rem', color: 'var(--brand-dark)'}}>
+                Totale:
+            </span>
+                                <span className="price-tag" style={{fontSize: '1.5rem'}}>
+                €{totalPrice.toFixed(2)}
+            </span>
                             </div>
-                            <Button variant="success" size="lg" className="w-100 rounded-pill fw-bold mb-2"
+                            <Button variant="success" size="lg"
+                                    className="w-100 rounded-pill fw-bold mb-2 btn-whatsapp-chic"
                                     onClick={handleCheckout}>
-                                <FaWhatsapp className="me-2" size={20}/> Invia Ordine su WhatsApp
+                                <FaWhatsapp className="me-2" size={20} color="#25D366"/> Invia Ordine su WhatsApp
                             </Button>
                         </div>
                     </Offcanvas.Body>

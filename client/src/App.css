@@ -51,19 +51,42 @@ html, body {
 }
 
 :root {
-  --primary: #1a1a1a;
-  --accent: #c5a059;
-  --bg: #f8f9fa;
+  --brand-gold: #c5a059; /* طلایی لوکس ایتالیایی */
+  --brand-dark: #2c2c2c; /* مشکی نرم‌تر و شیک‌تر */
+  --brand-muted: #8e8e8e; /* خاکستری برای توضیحات */
+  --font-fancy: 'Playfair Display', serif; /* فونت کلاسیک برای تیترها */
+  --font-clean: 'Inter', sans-serif;       /* فونت خوانا برای توضیحات */
 }
 
 body {
+  color: var(--brand-dark);       /* رنگ پیش‌فرض مشکی نرم */
   background-color: var(--bg);
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-clean); /* کل سایت پیش‌فرض خوانا باشه */
+}
+
+/* ۴. استایل اختصاصی تیترها و اسم غذاها */
+h1, h2, h3, h4, h5, h6, .category-title, .food-title, .font-playfair {
+  font-family: var(--font-fancy) !important;
+  color: var(--brand-dark);
+  letter-spacing: 0.3px;
+}
+
+/* ۵. استایل اختصاصی توضیحات غذا (زیر اسم غذا) */
+.food-desc {
+  font-family: var(--font-clean);
+  color: var(--brand-muted) !important;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  /* جلوگیری از طولانی شدن متن */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 /* 4. هدر عکس‌دار */
 .hero-section {
-  background: url('../public/background.jpg') no-repeat center center/cover;
+  background: url('../public/casaramona_background.png') no-repeat center center/cover;
   height: 250px;
   position: relative;
   border-radius: 0 0 30px 30px;
@@ -71,7 +94,7 @@ body {
 }
 
 .hero-overlay {
-  background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.4) 50%, transparent 100%);
   position: absolute;
   bottom: 0;
   width: 100%;
@@ -101,21 +124,24 @@ body {
 
 .nav-pill {
   flex: 0 0 auto;
-  padding: 8px 18px;
+  padding: 8px 20px;
   border-radius: 50px;
-  border: 1px solid #eee;
+  border: 1px solid #eaeaea;
   background: white;
-  color: #666;
-  font-weight: 600;
+  color: var(--brand-dark);
+  font-family: var(--font-clean); /* فونت مدرن و خوانا */
+  font-weight: 500;
   font-size: 0.9rem;
+  letter-spacing: 0.3px;
   white-space: nowrap;
   transition: all 0.2s;
 }
 
 .nav-pill.active {
-  background: var(--primary);
+  background: var(--brand-gold); /* بک‌گراند طلایی برند */
   color: white;
-  border-color: var(--primary);
+  border-color: var(--brand-gold);
+  box-shadow: 0 4px 12px rgba(197, 160, 89, 0.35); /* یه سایه طلاییِ نرم */
   transform: scale(1.05);
 }
 
@@ -246,21 +272,10 @@ body {
 /* ========================================= */
 /* عکس‌های پس‌زمینه ۴ بخش (لینک‌های خودت رو بذار) */
 
-.quad-menu { /* بالا چپ: منوی روز */
-  background: url('https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1000&auto=format&fit=crop') no-repeat center center/cover;
-}
-
-.quad-cafe { /* بالا راست: کافه */
-  background: url('https://images.unsplash.com/photo-1497935586351-b67a49e012bf?q=80&w=1000&auto=format&fit=crop') no-repeat center center/cover;
-}
-
-.quad-rest { /* پایین چپ: رستوران */
-  background: url('https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=1000&auto=format&fit=crop') no-repeat center center/cover;
-}
-
-.quad-cocktail { /* پایین راست: کوکتل */
-  background: url('https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=1000&auto=format&fit=crop') no-repeat center center/cover;
-}
+.quad-menu { background: url('/images/quad-colazione.jpg') no-repeat center center/cover; }
+.quad-cafe { background: url('/images/quad-gelato.jpg') no-repeat center center/cover; }
+.quad-rest { background: url('/images/quad-tavola.jpg') no-repeat center center/cover; }
+.quad-cocktail { background: url('/images/quad-aperitivo.jpg') no-repeat center center/cover; }
 
 /* ========================================= */
 /* انیمیشن باز شدن از وسط به ۴ طرف (جادوی اصلی) */
@@ -396,13 +411,14 @@ body {
 }
 
 .tab-btn {
-  background: #f8f9fa;
-  border: 1px solid #e9ecef;
-  color: #6c757d;
-  padding: 8px 16px;
-  border-radius: 20px;
+  background: #fdfdfd;
+  border: 1px solid #ebebeb;
+  color: var(--brand-muted);
+  padding: 10px 16px;
+  border-radius: 30px;
   font-weight: bold;
-  font-size: 0.9rem;
+  font-family: var(--font-fancy); /* فونت کلاسیک و شیک */
+  font-size: 1.05rem; /* یکم بزرگتر و خواناتر */
   white-space: nowrap; /* نمیذاره متن بره خط بعد */
   transition: all 0.3s ease;
   cursor: pointer;
@@ -411,9 +427,47 @@ body {
 
 /* حالتی که دکمه انتخاب شده */
 .tab-btn.active {
-  background: var(--dark, #212529); /* رنگ تیره */
-  color: white;
-  border-color: var(--dark, #212529);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  background: var(--brand-dark);
+  color: var(--brand-gold); /* ترکیب برنده: مشکی و طلایی */
+  border-color: var(--brand-dark);
+  box-shadow: 0 6px 15px rgba(44, 44, 44, 0.2);
   transform: translateY(-2px); /* یه نمه میاد بالا */
+}
+/* ۴. استایل اختصاصی قیمت‌ها (خداحافظ سبز تمپلیتی!) */
+.price-tag {
+  font-family: var(--font-fancy); /* آوردن همون فونت کلاسیک و شیک */
+  color: var(--brand-gold);
+  font-weight: 700;
+  font-size: 1.25rem; /* یه نمه درشت‌ترش کردیم که ابهت بگیره */
+  letter-spacing: 1px; /* فاصله اعداد بیشتر شد برای حس لوکس بودن */
+  font-style: italic; /* 🌟 جادوی اصلی: قیمت‌های ایتالیک تو منوها غوغا می‌کنه! */
+}
+/* ۵. استایل دکمه افزودن (مینیمال و خارج شدن از حالت Dominant) */
+.btn-add-chic {
+  background-color: transparent;
+  border: 1.5px solid var(--brand-gold);
+  color: var(--brand-gold);
+  transition: all 0.2s ease;
+}
+.btn-add-chic:active {
+  background-color: var(--brand-gold);
+  color: white;
+  transform: scale(0.95);
+}
+/* ۶. آیکون حذف سبد خرید (خروج از قرمز صنعتی) */
+.btn-delete-chic {
+  color: var(--brand-muted);
+  background: transparent;
+  border: none;
+  transition: color 0.2s;
+}
+.btn-delete-chic:active {
+  color: #d9534f; /* فقط وقتی روش کلیک میشه قرمز ملایم میشه */
+}
+/* ۷. دکمه واتس‌اپ اختصاصی و لوکس */
+.btn-whatsapp-chic {
+  background-color: var(--brand-dark);
+  color: var(--brand-gold);
+  border: 1px solid var(--brand-gold);
+  transition: all 0.3s ease;
 }
